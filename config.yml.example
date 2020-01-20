@@ -1,0 +1,20 @@
+
+#Serverconfig
+server:
+  applicationConnectors:
+    - type: https
+      port: 
+      # Database settings.
+database:
+  # the name of the JDBC driver,
+  driverClass: com.mysql.cj.jdbc.Driver
+  # mysql username
+  user: 
+  # mysql password
+  password:
+  #root
+  # the JDBC URL;  jdbc:mysql://ip:port/databasename
+  url: 
+
+
+

@@ -1,0 +1,4 @@
+Hier wird definiert welche Schnittstellen angeboten werden.
+Das Feature ist ein Interface, dass von der Ressource implementiert wird.
+
+jegliche Annotationen können hier "versteckt" werden und stören in der Implementierung nicht.
