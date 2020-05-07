@@ -1,13 +1,9 @@
 package feature;
 
 import io.dropwizard.hibernate.UnitOfWork;
-import model.Leistungsdiagnostik;
 
-import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
-import java.util.Optional;
 
 @Path("") //API url
 
@@ -19,11 +15,13 @@ import java.util.Optional;
  */
 public interface GateAccessLimiterServerFeature
 {
-   /* Beispiel:
+
     @GET
-    @Path("/id")
+    @Path("/open")
     @UnitOfWork
-    Key getbyID(@QueryParam("id") Optional<Integer> id);
-    */
+    boolean opengate();
+
+
+
 
 }

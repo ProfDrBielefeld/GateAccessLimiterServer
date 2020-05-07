@@ -1,20 +1,22 @@
 package resource;
 
 import feature.GateAccessLimiterServerFeature;
-import persistence.DataStorage;
-
-import javax.persistence.NoResultException;
-import javax.ws.rs.WebApplicationException;
-import java.util.Optional;
+import persistence.PermkeyDAO;
+import persistence.TempkeyDAO;
 
 /**
  * Implementierung der API
  */
 public class GateAccessLimiterServerServiceResource implements GateAccessLimiterServerFeature
 {
-    private DataStorage DAO;
+    private PermkeyDAO PermDAO;
+    private TempkeyDAO TempDAO;
 
-    public GateAccessLimiterServerServiceResource(DataStorage DAO){this.DAO =DAO;}
+    public GateAccessLimiterServerServiceResource(PermkeyDAO PermDAO, TempkeyDAO TempDAO){this.PermDAO = PermDAO; this.TempDAO = TempDAO;}
 
 
+    @Override
+    public boolean opengate() {
+        return false;
+    }
 }

@@ -3,9 +3,11 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import model.Leistungsdiagnostik;
+import model.Permkey;
+import model.Tempkey;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
-import persistence.DataStorage;
+import persistence.PermkeyDAO;
+import persistence.TempkeyDAO;
 import resource.GateAccessLimiterServerServiceResource;
 
 import javax.servlet.DispatcherType;
@@ -23,7 +25,7 @@ public class GateAccessLimiterServerServiceApplication extends Application<GateA
     /**
      * Hibernate bundle.
      */
-    private final HibernateBundle<GateAccessLimiterServerServiceConfiguration> hibernateBundle = new HibernateBundle<GateAccessLimiterServerServiceConfiguration>( Leistungsdiagnostik.class)
+    private final HibernateBundle<GateAccessLimiterServerServiceConfiguration> hibernateBundle = new HibernateBundle<GateAccessLimiterServerServiceConfiguration>( Permkey.class, Tempkey.class)
     {
         @Override
         public DataSourceFactory getDataSourceFactory(GateAccessLimiterServerServiceConfiguration configuration)
@@ -56,10 +58,12 @@ public class GateAccessLimiterServerServiceApplication extends Application<GateA
         // unauthenticated preflight requests should be permitted by spec
         cors.setInitParameter(CrossOriginFilter.CHAIN_PREFLIGHT_PARAM, Boolean.FALSE.toString());
 
-        final DataStorage LDDAO = new DataStorage(hibernateBundle.getSessionFactory());
+        final PermkeyDAO PMDAO = new PermkeyDAO(hibernateBundle.getSessionFactory());
+        final TempkeyDAO TMDAO = new TempkeyDAO(hibernateBundle.getSessionFactory());
 
-        final GateAccessLimiterServerServiceResource LDServiceResource = new GateAccessLimiterServerServiceResource(LDDAO);
-        environment.jersey().register(LDServiceResource);
+        final GateAccessLimiterServerServiceResource GALServiceResource = new GateAccessLimiterServerServiceResource(PMDAO,TMDAO);
+
+        environment.jersey().register(GALServiceResource);
 
 
     }
