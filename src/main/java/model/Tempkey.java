@@ -3,6 +3,7 @@ package model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tempkey_tbl")
@@ -23,10 +24,10 @@ public class Tempkey
     private int parentkey;
 
     @JsonProperty
-    private String startdate;
+    private LocalDate startdate;
 
     @JsonProperty
-    private String enddate;
+    private LocalDate enddate;
 
     public int getTempkey_id() {
         return tempkey_id;
@@ -52,19 +53,19 @@ public class Tempkey
         this.parentkey = parentkey;
     }
 
-    public String getStartdate() {
+    public LocalDate getStartdate() {
         return startdate;
     }
 
-    public void setStartdate(String startdate) {
+    public void setStartdate(LocalDate startdate) {
         this.startdate = startdate;
     }
 
-    public String getEnddate() {
+    public LocalDate getEnddate() {
         return enddate;
     }
 
-    public void setEnddate(String enddate) {
+    public void setEnddate(LocalDate enddate) {
         this.enddate = enddate;
     }
 }

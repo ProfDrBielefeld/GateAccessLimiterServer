@@ -19,7 +19,7 @@ public interface GateAccessLimiterServerFeature
     @GET
     @Path("/open")
     @UnitOfWork
-    boolean opengate();
+    public boolean opengate(String key);
 
 
 
