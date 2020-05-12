@@ -4,7 +4,6 @@ package model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -12,8 +11,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "model.permkey.getbykey", query = "select pk from permkey_tbl pk where pk.apikey like :apitoken")
 })
-public class Permkey
-{
+public class Permkey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty
