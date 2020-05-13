@@ -2,6 +2,7 @@ package resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import feature.GateAccessLimiterServerFeature;
+import model.Key;
 import model.Permkey;
 import model.Tempkey;
 import org.apache.commons.lang3.ObjectUtils;
@@ -25,25 +26,29 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
 
 
     @Override
-    public boolean opengate(String key)
+    public boolean opengate(Key sentkey)
     {
-        Permkey pcurrentkey = PermDAO.findKey(key);
-        if(pcurrentkey == null) // Wenn kein Permanenter Key
+        Key foundtkey = PermDAO.findKey(sentkey.getGatekey());
+        if(foundtkey == null) // Wenn kein Permanenter Key
         {
-            Tempkey tcurrentkey = TempDAO.findKey(key); // Dann Prüfen ob evt Temp key
-            if(tcurrentkey == null) // auch nicht gefunden -> Nicht berechtigt
+            foundtkey = TempDAO.findKey(sentkey.getGatekey()); // Dann Prüfen ob evt Temp key
+            if(foundtkey == null) // auch nicht gefunden -> Nicht berechtigt
             {
                 throw new WebApplicationException("Falscher Key",420); //Fehler für Fehlerhaften Schlüssel
 
             }
             else // Wenn es sich um einen temp key handelt, prüfe ob Zeitspanne ok ist
             {
+                //Cast zum Tempkey um an die Daten zu kommen
+                //Benötigt kein try catch, da es sich hier nur noch um einen Tempkey handeln kann
+                Tempkey tfoundkey = (Tempkey) foundtkey;
+
                 LocalDate date = LocalDate.now(); // Aktuelle Datum holen
-                if(tcurrentkey.getStartdate().isAfter(date)) //Prüfen ob Schlüssel schon Gültig ist
+                if(tfoundkey.getStartdate().isAfter(date)) //Prüfen ob Schlüssel schon Gültig ist
                 {
                     throw new WebApplicationException("Schlüssel noch nicht Gültig",421);
                 }
-                else if (tcurrentkey.getEnddate().isBefore(date)) //Prüfen ob Schlüssel schon abgelaufen ist
+                else if (tfoundkey.getEnddate().isBefore(date)) //Prüfen ob Schlüssel schon abgelaufen ist
                 {
                     throw new WebApplicationException("Schlüssel abgelaufen",422);
                 }
