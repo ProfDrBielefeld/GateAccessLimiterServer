@@ -8,17 +8,14 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "tempkey_tbl")
 @NamedQueries({
-        @NamedQuery(name = "model.tempkey.getbykey", query = "select tk from Tempkey tk where tk.tempkey like :apitoken")
+        @NamedQuery(name = "model.tempkey.getbykey", query = "select tk from Tempkey tk where tk.gatekey like :apitoken")
 })
-public class Tempkey
+public class Tempkey extends Key
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty
     private int tempkey_id;
-
-    @JsonProperty
-    private String tempkey;
 
     @JsonProperty
     private int parentkey;
@@ -35,14 +32,6 @@ public class Tempkey
 
     public void setTempkey_id(int tempkey_id) {
         this.tempkey_id = tempkey_id;
-    }
-
-    public String getTempkey() {
-        return tempkey;
-    }
-
-    public void setTempkey(String tempkey) {
-        this.tempkey = tempkey;
     }
 
     public int getParentkey() {
