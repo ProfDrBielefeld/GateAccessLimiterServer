@@ -7,9 +7,10 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "permkey_tbl")
+@Table(name = "permkey")
 @NamedQueries({
-        @NamedQuery(name = "model.permkey.getbykey", query = "select pk from permkey_tbl pk where pk.apikey like :apitoken")
+        //@NamedQuery(name = "model.permkey.getbykey", query = "select pk from permkey pk where pk.apikey like :apitoken")
+        @NamedQuery(name = "model.permkey.getbykey", query = "select j from Permkey j where j.apikey like :apitoken")
 })
 public class Permkey {
     @Id

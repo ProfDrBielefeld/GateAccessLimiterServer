@@ -1,5 +1,6 @@
 package resource;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import feature.GateAccessLimiterServerFeature;
 import model.Permkey;
 import model.Tempkey;

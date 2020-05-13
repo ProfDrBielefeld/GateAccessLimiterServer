@@ -6,6 +6,8 @@ import model.Permkey;
 import model.Tempkey;
 import org.hibernate.SessionFactory;
 
+import javax.persistence.NoResultException;
+
 /***
  * Klasse zum Verwalten der DB einträge für die Temp Keys
  */
@@ -16,9 +18,16 @@ public class TempkeyDAO extends AbstractDAO<Tempkey> {
         super(sessionFactory);
     }
 
-    public Tempkey findKey(String apikey)
+    public Tempkey findKey(String key)
     {
-        return (Tempkey) namedQuery("model.tempkey.getbykey").getSingleResult();
+        try
+        {
+            return (Tempkey) namedQuery("model.tempkey.getbykey").setParameter("apitoken", key).getSingleResult();
+        }
+        catch(NoResultException nrx) // Wenn kein Eintrg gefunden return null. Recource Funktion behandelt null result
+        {
+            return null;
+        }
     }
 
 }

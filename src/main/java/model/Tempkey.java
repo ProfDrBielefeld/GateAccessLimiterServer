@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "tempkey_tbl")
 @NamedQueries({
-        @NamedQuery(name = "model.tempkey.getbykey", query = "select tk from tempkey_tbl tk where tk.tempkey like :apitoken")
+        @NamedQuery(name = "model.tempkey.getbykey", query = "select tk from Tempkey tk where tk.tempkey like :apitoken")
 })
 public class Tempkey
 {
