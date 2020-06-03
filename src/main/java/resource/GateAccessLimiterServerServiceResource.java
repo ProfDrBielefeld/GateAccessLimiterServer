@@ -6,6 +6,7 @@ import model.Key;
 import model.Permkey;
 import model.Tempkey;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import persistence.PermkeyDAO;
 import persistence.TempkeyDAO;
 
@@ -28,11 +29,11 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
     @Override
     public boolean opengate(Key sentkey)
     {
-        Key foundtkey = PermDAO.findKey(sentkey.getGatekey());
-        if(foundtkey == null) // Wenn kein Permanenter Key
+        Key foundkey = PermDAO.findKey(sentkey.getGatekey());
+        if(foundkey == null) // Wenn kein Permanenter Key
         {
-            foundtkey = TempDAO.findKey(sentkey.getGatekey()); // Dann Prüfen ob evt Temp key
-            if(foundtkey == null) // auch nicht gefunden -> Nicht berechtigt
+            foundkey = TempDAO.findKey(sentkey.getGatekey()); // Dann Prüfen ob evt Temp key
+            if(foundkey == null) // auch nicht gefunden -> Nicht berechtigt
             {
                 throw new WebApplicationException("Falscher Key",420); //Fehler für Fehlerhaften Schlüssel
 
@@ -41,7 +42,7 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
             {
                 //Cast zum Tempkey um an die Daten zu kommen
                 //Benötigt kein try catch, da es sich hier nur noch um einen Tempkey handeln kann
-                Tempkey tfoundkey = (Tempkey) foundtkey;
+                Tempkey tfoundkey = (Tempkey) foundkey;
 
                 LocalDate date = LocalDate.now(); // Aktuelle Datum holen
                 if(tfoundkey.getStartdate().isAfter(date)) //Prüfen ob Schlüssel schon Gültig ist
