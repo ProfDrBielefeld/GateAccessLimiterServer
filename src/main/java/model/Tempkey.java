@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -17,8 +18,10 @@ public class Tempkey extends Key
     @JsonProperty
     private int tempkey_id;
 
-    @JsonProperty
-    private int parentkey;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="parentkey")
+    private Permkey parentkey;
 
     @JsonProperty
     private LocalDate startdate;
@@ -32,14 +35,6 @@ public class Tempkey extends Key
 
     public void setTempkey_id(int tempkey_id) {
         this.tempkey_id = tempkey_id;
-    }
-
-    public int getParentkey() {
-        return parentkey;
-    }
-
-    public void setParentkey(int parentkey) {
-        this.parentkey = parentkey;
     }
 
     public LocalDate getStartdate() {
@@ -56,5 +51,13 @@ public class Tempkey extends Key
 
     public void setEnddate(LocalDate enddate) {
         this.enddate = enddate;
+    }
+
+    public Permkey getParentkey() {
+        return parentkey;
+    }
+
+    public void setParentkey(Permkey parentkey) {
+        this.parentkey = parentkey;
     }
 }

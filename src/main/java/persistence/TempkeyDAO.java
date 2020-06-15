@@ -30,4 +30,9 @@ public class TempkeyDAO extends AbstractDAO<Tempkey> {
         }
     }
 
+    public Tempkey insert(Tempkey key)
+    {
+        return persist(key);
+    }
+
 }

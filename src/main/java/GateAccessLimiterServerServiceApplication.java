@@ -1,3 +1,4 @@
+import configuration.Location;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
@@ -43,6 +44,7 @@ public class GateAccessLimiterServerServiceApplication extends Application<GateA
     @Override
     public void run(GateAccessLimiterServerServiceConfiguration gateAccessLimiterServerServiceConfiguration, Environment environment) throws Exception {
 
+        Location location = gateAccessLimiterServerServiceConfiguration.getLocation();
         final FilterRegistration.Dynamic cors =
                 environment.servlets().addFilter("CORS", CrossOriginFilter.class);
 
@@ -61,7 +63,7 @@ public class GateAccessLimiterServerServiceApplication extends Application<GateA
         final PermkeyDAO PMDAO = new PermkeyDAO(hibernateBundle.getSessionFactory());
         final TempkeyDAO TMDAO = new TempkeyDAO(hibernateBundle.getSessionFactory());
 
-        final GateAccessLimiterServerServiceResource GALServiceResource = new GateAccessLimiterServerServiceResource(PMDAO,TMDAO);
+        final GateAccessLimiterServerServiceResource GALServiceResource = new GateAccessLimiterServerServiceResource(PMDAO,TMDAO,location);
 
         environment.jersey().register(GALServiceResource);
 

@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.annotation.JsonProperty;
+import configuration.Location;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.jetty.HttpConnectorFactory;
@@ -31,5 +32,22 @@ public class GateAccessLimiterServerServiceConfiguration extends Configuration {
     @JsonProperty("database")
     public DataSourceFactory getDataSourceFactory() {
         return dataSourceFactory;
+    }
+
+    /**
+     * A factory used to get the location of the Server from the config file
+     */
+    @Valid
+    @NotNull
+    private Location location = new Location();
+
+    @JsonProperty("location")
+    public Location getLocation() {
+        return location;
+    }
+
+    @JsonProperty("location")
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }
