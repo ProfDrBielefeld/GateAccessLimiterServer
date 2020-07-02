@@ -15,6 +15,12 @@ database:
   #root
   # the JDBC URL;  jdbc:mysql://ip:port/databasename
   url: 
+location:
+  #location of the gate
+  location_lat:
+  location_lon:
+  #max distance to the gate (min. 10) in meter
+  maxdistance:
 
 
 
