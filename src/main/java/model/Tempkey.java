@@ -1,10 +1,12 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tempkey_tbl")
@@ -24,10 +26,12 @@ public class Tempkey extends Key
     private Permkey parentkey;
 
     @JsonProperty
-    private LocalDate startdate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+    private LocalDateTime startdate;
 
     @JsonProperty
-    private LocalDate enddate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+    private LocalDateTime enddate;
 
     public int getTempkey_id() {
         return tempkey_id;
@@ -37,19 +41,19 @@ public class Tempkey extends Key
         this.tempkey_id = tempkey_id;
     }
 
-    public LocalDate getStartdate() {
+    public LocalDateTime getStartdate() {
         return startdate;
     }
 
-    public void setStartdate(LocalDate startdate) {
+    public void setStartdate(LocalDateTime startdate) {
         this.startdate = startdate;
     }
 
-    public LocalDate getEnddate() {
+    public LocalDateTime getEnddate() {
         return enddate;
     }
 
-    public void setEnddate(LocalDate enddate) {
+    public void setEnddate(LocalDateTime enddate) {
         this.enddate = enddate;
     }
 

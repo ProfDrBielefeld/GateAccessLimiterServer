@@ -12,6 +12,7 @@ import util.DistanceCalculator;
 
 import javax.ws.rs.WebApplicationException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
                 //Benötigt kein try catch, da es sich hier nur noch um einen Tempkey handeln kann
                 Tempkey tfoundkey = (Tempkey) foundkey;
 
-                LocalDate date = LocalDate.now(); // Aktuelle Datum holen
+                LocalDateTime date = LocalDateTime.now(); // Aktuelle Datum holen
                 if(tfoundkey.getStartdate().isAfter(date)) //Prüfen ob Schlüssel schon gültig ist
                 {
                     throw new WebApplicationException("Schlüssel noch nicht gültig",421);
@@ -80,8 +81,8 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
             throw new WebApplicationException("Ungültiger Schlüssel",420); //Fehler für Fehlerhaften Schlüssel
         }
         Tempkey newtempKey = new Tempkey();
-        newtempKey.setStartdate(LocalDate.parse(startdate));
-        newtempKey.setEnddate(LocalDate.parse(enddate));
+        newtempKey.setStartdate(LocalDateTime.parse(startdate));
+        newtempKey.setEnddate(LocalDateTime.parse(enddate));
         newtempKey.setParentkey(foundkey);
         int length = 15;
         boolean useLetters = true;
