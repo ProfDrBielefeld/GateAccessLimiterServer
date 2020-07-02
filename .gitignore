@@ -231,5 +231,6 @@ gradle-app.setting
 
 ### hide configfile from public
 config.yml
+*.jks
 
 # End of https://www.gitignore.io/api/java,maven,macos,linux,gradle,windows,intellij
