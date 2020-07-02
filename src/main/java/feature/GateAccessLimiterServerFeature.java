@@ -8,6 +8,7 @@ import model.Tempkey;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
+import java.util.List;
 
 @Path("") //API url
 
@@ -25,7 +26,7 @@ public interface GateAccessLimiterServerFeature
      * @param sendkey JSON Objekt. Schlüssel der an die API gesentet wird
      * @return Ob Schranke geöffnet
      */
-    @GET
+    @POST
     @Path("/open")
     @UnitOfWork
     public boolean opengate(Key sendkey,
@@ -45,6 +46,17 @@ public interface GateAccessLimiterServerFeature
     public Tempkey createTempkey(Key sendkey,
                                  @QueryParam("startdate") String startdate,
                                  @QueryParam("enddate") String enddate);
+
+
+    /**
+     * Funktion die alle Tempkeys die zu einem Permkey gehören zurück gibt
+     * @param permgatekey Permkey deren tempkeys gesucht werden
+     * @return gefundenen tempkeys
+     */
+    @GET
+    @Path("/tempkey/{permkey}")
+    @UnitOfWork
+    public List<Tempkey> getTempkeys(@PathParam("permkey") String permgatekey);
 
 
 
