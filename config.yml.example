@@ -1,10 +1,12 @@
-
 #Serverconfig
 server:
   applicationConnectors:
     - type: https
-      port: 
-      # Database settings.
+      port:
+      keyStorePath:
+      keyStorePassword:
+      validateCerts: false
+# Database settings.
 database:
   # the name of the JDBC driver,
   driverClass: com.mysql.cj.jdbc.Driver
@@ -14,7 +16,11 @@ database:
   password:
   #root
   # the JDBC URL;  jdbc:mysql://ip:port/databasename
-  url: 
+  url:
+serversecret:
+  #server secret. Must be the same value as in the Client!
+  #DO NOT CHANGE IT UNLESS YOU KNOW WHAT YOU ARE DOING
+  secretKey:
 location:
   #location of the gate
   location_lat:
