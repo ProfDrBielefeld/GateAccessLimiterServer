@@ -7,6 +7,11 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class Key
 {
+    public Key (){}
+    public Key (String gatekey)
+    {
+        this.gatekey = gatekey;
+    }
     @JsonProperty
     private String gatekey;
     public String getGatekey() {

@@ -1,7 +1,10 @@
 import configuration.Location;
+import configuration.Secret;
+import filter.AuthenticateFilter;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
+import io.dropwizard.hibernate.UnitOfWorkAwareProxyFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import model.Permkey;
@@ -44,7 +47,7 @@ public class GateAccessLimiterServerServiceApplication extends Application<GateA
     @Override
     public void run(GateAccessLimiterServerServiceConfiguration gateAccessLimiterServerServiceConfiguration, Environment environment) throws Exception {
 
-        Location location = gateAccessLimiterServerServiceConfiguration.getLocation();
+
         final FilterRegistration.Dynamic cors =
                 environment.servlets().addFilter("CORS", CrossOriginFilter.class);
 
@@ -63,10 +66,14 @@ public class GateAccessLimiterServerServiceApplication extends Application<GateA
         final PermkeyDAO PMDAO = new PermkeyDAO(hibernateBundle.getSessionFactory());
         final TempkeyDAO TMDAO = new TempkeyDAO(hibernateBundle.getSessionFactory());
 
+        final Location location = gateAccessLimiterServerServiceConfiguration.getLocation();
+        final Secret secret = gateAccessLimiterServerServiceConfiguration.getSecret();
+
         final GateAccessLimiterServerServiceResource GALServiceResource = new GateAccessLimiterServerServiceResource(PMDAO,TMDAO,location);
+        final AuthenticateFilter AuthFilter = new UnitOfWorkAwareProxyFactory(hibernateBundle).create(AuthenticateFilter.class, new Class[] {PermkeyDAO.class, TempkeyDAO.class, Secret.class}, new Object[]{PMDAO ,TMDAO,secret});
 
         environment.jersey().register(GALServiceResource);
-
+        environment.jersey().register(AuthFilter);
 
     }
 }

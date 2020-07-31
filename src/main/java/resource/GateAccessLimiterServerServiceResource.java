@@ -13,6 +13,7 @@ import util.DistanceCalculator;
 import javax.ws.rs.WebApplicationException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -24,41 +25,13 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
     private TempkeyDAO TempDAO;
     private Location location;
 
+
     public GateAccessLimiterServerServiceResource(PermkeyDAO PermDAO, TempkeyDAO TempDAO, Location location){this.PermDAO = PermDAO; this.TempDAO = TempDAO; this.location = location;}
 
 
     @Override
-    public boolean opengate(Key sendkey,double latuser,double lonuser)
+    public boolean opengate(double latuser,double lonuser)
     {
-        Key foundkey = PermDAO.findKey(sendkey.getGatekey());
-        if(foundkey == null) // Wenn kein Permanenter Key
-        {
-            foundkey = TempDAO.findKey(sendkey.getGatekey()); // Dann Prüfen ob evt Temp key
-            if(foundkey == null) // auch nicht gefunden -> Nicht berechtigt
-            {
-                throw new WebApplicationException("Ungültiger Schlüssel",420); //Fehler für Fehlerhaften Schlüssel
-
-            }
-            else // Wenn es sich um einen temp key handelt, prüfe ob Zeitspanne ok ist
-            {
-                //Cast zum Tempkey um an die Daten zu kommen
-                //Benötigt kein try catch, da es sich hier nur noch um einen Tempkey handeln kann
-                Tempkey tfoundkey = (Tempkey) foundkey;
-
-                LocalDateTime date = LocalDateTime.now(); // Aktuelle Datum holen
-                if(tfoundkey.getStartdate().isAfter(date)) //Prüfen ob Schlüssel schon gültig ist
-                {
-                    throw new WebApplicationException("Schlüssel noch nicht gültig",421);
-                }
-                else if (tfoundkey.getEnddate().isBefore(date)) //Prüfen ob Schlüssel schon abgelaufen ist
-                {
-                    throw new WebApplicationException("Schlüssel abgelaufen",422);
-                }
-            }
-        }
-        System.out.println(lonuser);
-        System.out.println(latuser);
-        System.out.println("Debug entfernung: " + DistanceCalculator.calculateDistance(location.getLocation_lat(), location.getLocation_lon(), latuser,lonuser));
         if(location.getMaxdistance() < DistanceCalculator.calculateDistance(location.getLocation_lat(), location.getLocation_lon(), latuser,lonuser))
         {
             throw new WebApplicationException("Zu weit von der Schranke enfernt",423);
@@ -73,17 +46,19 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
     }
 
     @Override
-    public Tempkey createTempkey(Key sendkey, String startdate, String enddate)
+    public Tempkey createTempkey(String apiKey, String startdate, String enddate, String purpose)
     {
-        Permkey foundkey = PermDAO.findKey(sendkey.getGatekey());
+        Permkey foundkey = PermDAO.findKey(apiKey);
         if(foundkey == null) // Wenn kein Permanenter Key
         {
-            throw new WebApplicationException("Ungültiger Schlüssel",420); //Fehler für Fehlerhaften Schlüssel
+            throw new WebApplicationException("Temporäre Schlüssel dürfen keine Schlüssel erstellen",420); //Fehler für Fehlerhaften Schlüssel
         }
         Tempkey newtempKey = new Tempkey();
-        newtempKey.setStartdate(LocalDateTime.parse(startdate));
-        newtempKey.setEnddate(LocalDateTime.parse(enddate));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        newtempKey.setStartdate(LocalDateTime.parse(startdate,formatter));
+        newtempKey.setEnddate(LocalDateTime.parse(enddate,formatter));
         newtempKey.setParentkey(foundkey);
+        newtempKey.setPurpose(purpose);
         int length = 15;
         boolean useLetters = true;
         boolean useNumbers = true;
@@ -94,9 +69,8 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
     }
 
     @Override
-    public List<Tempkey> getTempkeys(String permgatekey) {
-        System.out.println(permgatekey);
-        Permkey foundkey = PermDAO.findKey(permgatekey);
+    public List<Tempkey> getTempkeys(String apiKey) {
+        Permkey foundkey = PermDAO.findKey(apiKey);
         if(foundkey == null) // Wenn kein Permanenter Key
         {
             throw new WebApplicationException("Ungültiger Schlüssel",420); //Fehler für Fehlerhaften Schlüssel

@@ -1,9 +1,8 @@
 import com.fasterxml.jackson.annotation.JsonProperty;
 import configuration.Location;
+import configuration.Secret;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.jetty.HttpConnectorFactory;
-import io.dropwizard.server.DefaultServerFactory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -35,6 +34,18 @@ public class GateAccessLimiterServerServiceConfiguration extends Configuration {
     }
 
     /**
+     *  A factory used to get the secretKey of the Server from the config file
+     */
+
+    @Valid
+    @NotNull
+    private Secret secret = new Secret();
+
+    @JsonProperty("secret")
+    public Secret getSecret(){
+        return secret;
+    }
+    /*
      * A factory used to get the location of the Server from the config file
      */
     @Valid
@@ -46,8 +57,5 @@ public class GateAccessLimiterServerServiceConfiguration extends Configuration {
         return location;
     }
 
-    @JsonProperty("location")
-    public void setLocation(Location location) {
-        this.location = location;
-    }
+
 }
