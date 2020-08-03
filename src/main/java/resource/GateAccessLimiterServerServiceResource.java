@@ -34,7 +34,7 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
     {
         if(location.getMaxdistance() < DistanceCalculator.calculateDistance(location.getLocation_lat(), location.getLocation_lon(), latuser,lonuser))
         {
-            throw new WebApplicationException("Zu weit von der Schranke enfernt",423);
+            throw new WebApplicationException("Zu weit von der Schranke entfernt",423);
         }
         /*
             Wenn ein Permanenter Schlüssel oder ein
