@@ -40,8 +40,8 @@ public interface GateAccessLimiterServerFeature
      * @param enddate Darum wann der Key abläuft
      * @return Erstellten Tempkey ans JSON Object
      */
-    @POST
-    @Path("/tempkey")
+    @GET
+    @Path("/newtempkey")
     @UnitOfWork
     public Tempkey createTempkey(@QueryParam("apiKey") String apiKey,
                                  @QueryParam("startdate") String startdate,
@@ -58,7 +58,4 @@ public interface GateAccessLimiterServerFeature
     @Path("/tempkey")
     @UnitOfWork
     public List<Tempkey> getTempkeys(@QueryParam("apiKey") String apiKey);
-
-
-
 }
