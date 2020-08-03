@@ -28,7 +28,7 @@ public class AuthenticateFilter implements ContainerRequestFilter {
     private static final String PARAM_API_KEY = "apiKey";
     private static final String PARAM_TOKEN = "token";
     private static final long SECONDS_IN_MILLISECOND = 1000L;
-    private static final int TTL_SECONDS = 60;
+    private static final int TTL_SECONDS = 10;
     private PermkeyDAO PermDAO;
     private TempkeyDAO TempDAO;
     private Secret secret;
@@ -68,7 +68,7 @@ public class AuthenticateFilter implements ContainerRequestFilter {
 
     private Response responseMissingParameter(String name) {
         return Response.status(Response.Status.BAD_REQUEST)
-                .type(MediaType.TEXT_PLAIN_TYPE)
+                .type(MediaType.APPLICATION_JSON)
                 .entity("Parameter '" + name + "' is required.")
                 .build();
     }
@@ -123,7 +123,6 @@ public class AuthenticateFilter implements ContainerRequestFilter {
                 return true;
             }
         }
-
         return false;
     }
 }
