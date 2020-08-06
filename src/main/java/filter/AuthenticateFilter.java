@@ -28,7 +28,7 @@ public class AuthenticateFilter implements ContainerRequestFilter {
     private static final String PARAM_API_KEY = "apiKey";
     private static final String PARAM_TOKEN = "token";
     private static final long SECONDS_IN_MILLISECOND = 1000L;
-    private static final int TTL_SECONDS = 10;
+    private static final int TTL_SECONDS = 60;
     private PermkeyDAO PermDAO;
     private TempkeyDAO TempDAO;
     private Secret secret;
@@ -63,7 +63,7 @@ public class AuthenticateFilter implements ContainerRequestFilter {
     private String extractParam(ContainerRequestContext context, String param) {
         final UriInfo uriInfo = context.getUriInfo();
         final List user = uriInfo.getQueryParameters().get(param);
-        return CollectionUtils.isEmpty(user) ? null : String.valueOf(user.get(0));
+        return CollectionUtils.isEmpty(user) ? null : String.valueOf(user.get(0)); //using  CollectionUtils cause it null safe
     }
 
     private Response responseMissingParameter(String name) {
