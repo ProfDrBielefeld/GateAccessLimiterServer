@@ -1,8 +1,8 @@
 package resource;
 
+import com.pi4j.io.gpio.*;
 import configuration.Location;
 import feature.GateAccessLimiterServerFeature;
-import model.Key;
 import model.Permkey;
 import model.Tempkey;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -11,7 +11,6 @@ import persistence.TempkeyDAO;
 import util.DistanceCalculator;
 
 import javax.ws.rs.WebApplicationException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -23,25 +22,35 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
 {
     private PermkeyDAO PermDAO;
     private TempkeyDAO TempDAO;
-    private Location location;
+    private Location serverlocation;
+    //create gpio controler
+    final GpioController gpio = GpioFactory.getInstance();
+    //PIN für das Relais bereitstellen, GPIO2 Pin, ausgeschaltet laden
+    final GpioPinDigitalOutput relaispin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_09,"Relais", PinState.LOW);
 
-
-    public GateAccessLimiterServerServiceResource(PermkeyDAO PermDAO, TempkeyDAO TempDAO, Location location){this.PermDAO = PermDAO; this.TempDAO = TempDAO; this.location = location;}
+    public GateAccessLimiterServerServiceResource(PermkeyDAO PermDAO, TempkeyDAO TempDAO, Location location){this.PermDAO = PermDAO; this.TempDAO = TempDAO; this.serverlocation = location;}
 
 
     @Override
     public boolean opengate(double latuser,double lonuser)
     {
-        if(location.getMaxdistance() < DistanceCalculator.calculateDistance(location.getLocation_lat(), location.getLocation_lon(), latuser,lonuser))
+        //Berechnung der Entfernung zwischen client und Server
+        if(serverlocation.getMaxdistance() < DistanceCalculator.calculateDistance(serverlocation.getLocation_lat(), serverlocation.getLocation_lon(), latuser,lonuser))
         {
             throw new WebApplicationException("Zu weit von der Schranke entfernt",423);
         }
-        /*
-            Wenn ein Permanenter Schlüssel oder ein
-            Temporärer Schlüssel der aktuell Gültig ist verwendet wurde
-            kann die Schranke geöffnet werden.
-         */
-        //todo: Hier GIOP schalten
+        //Thread erstellen um das Relais zu schalten.
+        new Thread(() ->
+        {
+            relaispin.high(); //PIN auf HIGH um Relais zu schalten
+            try {
+                Thread.sleep(1000); // Signal bleibt 1000ms bestehen
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            relaispin.low(); // PIN auf LOW um Relais zu schließen
+        }).start();
+
         return true;
     }
 
