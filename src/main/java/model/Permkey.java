@@ -9,7 +9,6 @@ import java.util.List;
 @Entity
 @Table(name = "permkey")
 @NamedQueries({
-        //@NamedQuery(name = "model.permkey.getbykey", query = "select pk from permkey pk where pk.apikey like :apitoken")
         @NamedQuery(name = "model.permkey.getbykey", query = "select j from Permkey j where j.gatekey like :apitoken")
 })
 public class Permkey extends Key{
