@@ -84,6 +84,6 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
         {
             throw new WebApplicationException("Ungültiger Schlüssel",420); //Fehler für Fehlerhaften Schlüssel
         }
-        return foundkey.getTempkeyListList();
+        return foundkey.getTempkeyList();
     }
 }
