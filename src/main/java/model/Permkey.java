@@ -23,7 +23,7 @@ public class Permkey extends Key{
     @OneToMany(cascade= CascadeType.ALL)
     @JsonProperty
     @JoinColumn(name="parentkey")
-    private List<Tempkey> tempkeyListList;
+    private List<Tempkey> tempkeyList;
 
     public String getNote() {
         return note;
@@ -37,11 +37,11 @@ public class Permkey extends Key{
         return permkey_id;
     }
 
-    public List<Tempkey> getTempkeyListList() {
-        return tempkeyListList;
+    public List<Tempkey> getTempkeyList() {
+        return tempkeyList;
     }
 
-    public void setTempkeyListList(List<Tempkey> tempkeyListList) {
-        this.tempkeyListList = tempkeyListList;
+    public void setTempkeyList(List<Tempkey> tempkeyList) {
+        this.tempkeyList = tempkeyList;
     }
 }
