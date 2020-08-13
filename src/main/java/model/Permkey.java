@@ -25,7 +25,7 @@ public class Permkey extends Key{
     @JoinColumn(name="parentkey")
     private List<Tempkey> tempkeyList;
 
-    public Permkey(int permkey_id,String gatekey, String note, List tempkeyList)
+    public Permkey(int permkey_id,String gatekey, String note, List<Tempkey> tempkeyList)
     {
         super(gatekey);
         this.permkey_id = permkey_id;

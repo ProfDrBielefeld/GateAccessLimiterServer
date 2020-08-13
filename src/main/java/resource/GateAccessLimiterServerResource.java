@@ -18,17 +18,17 @@ import java.util.List;
 /**
  * Implementierung der API
  */
-public class GateAccessLimiterServerServiceResource implements GateAccessLimiterServerFeature
+public class GateAccessLimiterServerResource implements GateAccessLimiterServerFeature
 {
     private PermkeyDAO PermDAO;
     private TempkeyDAO TempDAO;
     private Location serverlocation;
     //create gpio controler
-    final GpioController gpio = GpioFactory.getInstance();
+    //final GpioController gpio = GpioFactory.getInstance();
     //PIN für das Relais bereitstellen, GPIO2 Pin, ausgeschaltet laden
-    final GpioPinDigitalOutput relaispin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_09,"Relais", PinState.LOW);
+    //final GpioPinDigitalOutput relaispin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_09,"Relais", PinState.LOW);
 
-    public GateAccessLimiterServerServiceResource(PermkeyDAO PermDAO, TempkeyDAO TempDAO, Location location){this.PermDAO = PermDAO; this.TempDAO = TempDAO; this.serverlocation = location;}
+    public GateAccessLimiterServerResource(PermkeyDAO PermDAO, TempkeyDAO TempDAO, Location location){this.PermDAO = PermDAO; this.TempDAO = TempDAO; this.serverlocation = location;}
 
 
     @Override
@@ -40,7 +40,7 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
             throw new WebApplicationException("Zu weit von der Schranke entfernt",423);
         }
         //Thread erstellen um das Relais zu schalten.
-        new Thread(() ->
+  /*      new Thread(() ->
         {
             relaispin.high(); //PIN auf HIGH um Relais zu schalten
             try {
@@ -50,7 +50,7 @@ public class GateAccessLimiterServerServiceResource implements GateAccessLimiter
             }
             relaispin.low(); // PIN auf LOW um Relais zu schließen
         }).start();
-
+*/
         return true;
     }
 

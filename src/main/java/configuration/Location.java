@@ -21,6 +21,15 @@ public class Location {
     @Min(10)
     private double maxdistance;
 
+    public Location(){}
+
+    public Location(double location_lat, double location_lon, double maxdistance)
+    {
+        this.location_lat = location_lat;
+        this.location_lon = location_lon;
+        this.maxdistance = maxdistance;
+    }
+
     @JsonProperty
     public double getLocation_lat() {
         return location_lat;
