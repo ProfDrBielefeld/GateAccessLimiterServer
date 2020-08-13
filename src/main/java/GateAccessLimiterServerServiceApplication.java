@@ -12,7 +12,7 @@ import model.Tempkey;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import persistence.PermkeyDAO;
 import persistence.TempkeyDAO;
-import resource.GateAccessLimiterServerServiceResource;
+import resource.GateAccessLimiterServerResource;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -69,7 +69,7 @@ public class GateAccessLimiterServerServiceApplication extends Application<GateA
         final Location location = gateAccessLimiterServerServiceConfiguration.getLocation();
         final Secret secret = gateAccessLimiterServerServiceConfiguration.getSecret();
 
-        final GateAccessLimiterServerServiceResource GALServiceResource = new GateAccessLimiterServerServiceResource(PMDAO,TMDAO,location);
+        final GateAccessLimiterServerResource GALServiceResource = new GateAccessLimiterServerResource(PMDAO,TMDAO,location);
         final AuthenticateFilter AuthFilter = new UnitOfWorkAwareProxyFactory(hibernateBundle).create(AuthenticateFilter.class, new Class[] {PermkeyDAO.class, TempkeyDAO.class, Secret.class}, new Object[]{PMDAO ,TMDAO,secret});
 
         environment.jersey().register(GALServiceResource);

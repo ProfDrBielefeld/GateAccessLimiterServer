@@ -20,7 +20,7 @@ public class Tempkey extends Key
     private int tempkey_id;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(targetEntity = Permkey.class)
     @JoinColumn(name="parentkey")
     private Permkey parentkey;
 
@@ -35,6 +35,18 @@ public class Tempkey extends Key
     @JsonProperty
     private String purpose;
 
+    public Tempkey(){
+        // Jackson deserialization
+    }
+
+    public Tempkey(int tempkey_id, LocalDateTime startdate, LocalDateTime enddate, String purpose, String gatekey, Permkey parentkey){
+        super(gatekey);
+        this.tempkey_id = tempkey_id;
+        this.startdate = startdate;
+        this.enddate = enddate;
+        this.purpose = purpose;
+        this.parentkey = parentkey;
+    }
 
     public int getTempkey_id() {
         return tempkey_id;
