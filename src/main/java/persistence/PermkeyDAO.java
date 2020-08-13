@@ -34,4 +34,7 @@ public class PermkeyDAO extends AbstractDAO<Permkey> {
         }
     }
 
+    public Permkey create(Permkey permkey) {
+        return persist(permkey);
+    }
 }
