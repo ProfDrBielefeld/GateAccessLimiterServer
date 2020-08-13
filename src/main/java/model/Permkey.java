@@ -25,6 +25,18 @@ public class Permkey extends Key{
     @JoinColumn(name="parentkey")
     private List<Tempkey> tempkeyList;
 
+    public Permkey(int permkey_id,String gatekey, String note, List tempkeyList)
+    {
+        super(gatekey);
+        this.permkey_id = permkey_id;
+        this.note = note;
+        this.tempkeyList = tempkeyList;
+    }
+
+    public Permkey(){
+        // Jackson deserialization
+    }
+
     public String getNote() {
         return note;
     }
