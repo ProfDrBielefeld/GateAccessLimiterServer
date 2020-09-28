@@ -23,13 +23,14 @@ public class PermkeyDAOTest {
         permkeyDAO = new PermkeyDAO(daoTestRule.getSessionFactory());
         daoTestRule.inTransaction(()->{
            permkeyDAO.create(new Permkey(0,"testkey","Test", new ArrayList<Tempkey>()));
-            //permkeyDAO.create(new Permkey(1,"testkey2","Test2", new ArrayList<Tempkey>()));
         });
     }
 
     @Test
     public void findKey(){
-        final Permkey testpermkey = daoTestRule.inTransaction(()-> permkeyDAO.findKey("testkey"));
-        assertThat(testpermkey).extracting("gatekey").containsOnly("testkey");
+        final Permkey testpermkey = daoTestRule.inTransaction(()->
+                permkeyDAO.findKey("testkey"));
+        assertThat(testpermkey).extracting("gatekey")
+                .containsOnly("testkey");
     }
 }

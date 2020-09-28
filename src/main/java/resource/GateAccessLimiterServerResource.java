@@ -11,6 +11,7 @@ import persistence.TempkeyDAO;
 import util.DistanceCalculator;
 
 import javax.ws.rs.WebApplicationException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -24,13 +25,16 @@ public class GateAccessLimiterServerResource implements GateAccessLimiterServerF
     private TempkeyDAO TempDAO;
     private Location serverlocation;
     //create gpio controler
-    //final GpioController gpio = GpioFactory.getInstance();
+    final GpioController gpio = GpioFactory.getInstance();
     //PIN für das Relais bereitstellen, GPIO2 Pin, ausgeschaltet laden
-    //final GpioPinDigitalOutput relaispin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_09,"Relais", PinState.LOW);
+    final GpioPinDigitalOutput relaispin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_09,"Relais", PinState.LOW);
 
     public GateAccessLimiterServerResource(PermkeyDAO PermDAO, TempkeyDAO TempDAO, Location location){this.PermDAO = PermDAO; this.TempDAO = TempDAO; this.serverlocation = location;}
 
-
+    static boolean isLinuxSystem()
+    { String osName = System.getProperty("os.name").toLowerCase();
+        return osName.indexOf("linux") >= 0;
+    }
     @Override
     public boolean opengate(double latuser,double lonuser)
     {
@@ -40,7 +44,7 @@ public class GateAccessLimiterServerResource implements GateAccessLimiterServerF
             throw new WebApplicationException("Zu weit von der Schranke entfernt",423);
         }
         //Thread erstellen um das Relais zu schalten.
-  /*      new Thread(() ->
+        new Thread(() ->
         {
             relaispin.high(); //PIN auf HIGH um Relais zu schalten
             try {
@@ -50,7 +54,16 @@ public class GateAccessLimiterServerResource implements GateAccessLimiterServerF
             }
             relaispin.low(); // PIN auf LOW um Relais zu schließen
         }).start();
-*/
+
+
+        /*if (isLinuxSystem())
+        { System.out.println("Linux System");
+            try {
+                Process process = Runtime.getRuntime().exec("python servo.py");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
         return true;
     }
 

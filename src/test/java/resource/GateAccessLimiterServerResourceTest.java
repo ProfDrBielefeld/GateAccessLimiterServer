@@ -60,6 +60,7 @@ public class GateAccessLimiterServerResourceTest
 		reset(SERVERLOCATION);
 	}
 
+
 	@Test
 	public void listTempkeys() throws Exception
 	{
@@ -88,26 +89,35 @@ public class GateAccessLimiterServerResourceTest
 	@Test
 	public void openGate() throws Exception
 	{
-		when(SERVERLOCATION.getLocation_lat()).thenReturn(51.845157);
-		when(SERVERLOCATION.getLocation_lon()).thenReturn(6.592370);
+		when(SERVERLOCATION.getLocation_lat()).thenReturn(51.50606);
+		when(SERVERLOCATION.getLocation_lon()).thenReturn(7.45692);
 		when(SERVERLOCATION.getMaxdistance()).thenReturn(500.00);
-		final Response response = RESOURCES.target("/open").queryParam("latuser",51.845157).queryParam("lonuser",6.592370).request().get();
+		final Response response = RESOURCES.target("/open")
+				.queryParam("latuser",51.50606)
+				.queryParam("lonuser",7.45692)
+				.request().get();
 		verify(SERVERLOCATION).getLocation_lat();
 		verify(SERVERLOCATION).getLocation_lon();
 		verify(SERVERLOCATION).getMaxdistance();
 		assertThat(response.getStatusInfo()).isEqualTo(Response.Status.OK);
 		assertThat(response.readEntity(boolean.class)).isEqualTo(true);
 	}
+
 	@Test
 	public void openGateFailure() throws Exception {
-		when(SERVERLOCATION.getLocation_lat()).thenReturn(51.845157);
-		when(SERVERLOCATION.getLocation_lon()).thenReturn(6.592370);
+		when(SERVERLOCATION.getLocation_lat()).thenReturn(51.50606);
+		when(SERVERLOCATION.getLocation_lon()).thenReturn(7.45692);
 		when(SERVERLOCATION.getMaxdistance()).thenReturn(500.00);
-		final Response response = RESOURCES.target("/open").queryParam("latuser", 0.0).queryParam("lonuser", 0.0).request().get();
+		final Response response = RESOURCES.target("/open")
+				.queryParam("latuser", 0.0)
+				.queryParam("lonuser", 0.0)
+				.request().get();
 		verify(SERVERLOCATION).getLocation_lat();
 		verify(SERVERLOCATION).getLocation_lon();
 		verify(SERVERLOCATION).getMaxdistance();
 		assertThat(response.getStatusInfo()).isNotEqualTo(Response.Status.OK);
 		assertThat(response.readEntity(String.class)).contains("Zu weit von der Schranke entfernt");
 	}
+
+
 }
